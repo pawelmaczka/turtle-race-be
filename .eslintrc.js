@@ -39,11 +39,7 @@ module.exports = {
       "import/no-unresolved": 0,
       "import/prefer-default-export": 0,
       "import/no-extraneous-dependencies": 0,
-      '@typescript-eslint/explicit-function-return-type': [
-        'error',
-        {
-          allowExpressions: true
-        }
-      ]
+      "import/extensions": 0,
+      "@typescript-eslint/explicit-function-return-type": 0,
     }
 };

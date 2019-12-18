@@ -7,7 +7,7 @@
   "author": "Pawel Maczka",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node src/server.ts",
+    "dev": "ts-node-dev src/server.ts",
     "lint": "eslint ./src/**/*.ts"
   },
   "devDependencies": {
@@ -24,7 +24,7 @@
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "ts-jest": "^24.2.0",
-    "ts-node": "^8.5.4",
+    "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.3"
   },
   "dependencies": {
