@@ -1,0 +1,9 @@
+{
+  "name": "turtle-race-be",
+  "version": "0.0.1",
+  "description": "Backend for Turtle Race game",
+  "main": "src/server.ts",
+  "repository": "git@github.com:pawelmaczka/turtle-race-be.git",
+  "author": "Pawel Maczka",
+  "license": "MIT"
+}
