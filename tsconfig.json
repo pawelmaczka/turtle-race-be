@@ -16,6 +16,7 @@
           "models/*": ["./src/models/*"],
           "types/*": ["./src/types/*"],
           "controllers/*": ["./src/controllers/*"],
+          "helpers/*": ["./src/helpers/*"],
       }
   },
   "include": [
