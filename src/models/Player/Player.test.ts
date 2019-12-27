@@ -1,5 +1,4 @@
 import GameCard from 'types/GameCard';
-import { CARDS_IN_HAND } from 'config/game';
 import Player from './Player';
 
 const firstCard: GameCard = {
@@ -43,7 +42,7 @@ describe('Player', () => {
       expect(player.getCards()).toEqual([firstCard, secondCard]);
     });
 
-    it('throws an error and do not add card if the Player has already full hand of cards', () => {
+    it("throws an error and do not add card if the Player can't receive more cards", () => {
       const player = new Player('John');
 
       player.canReceiveCard = jest
@@ -63,16 +62,17 @@ describe('Player', () => {
 
   describe('canReceiveCard', () => {
     it('returns false if user has already maximum or more cards in hand', () => {
-      jest.mock('config/game', () => ({
-        CARDS_IN_HAND: 2,
-      }));
-      const player = new Player('John');
+      const player = new Player('John', 2);
+      const secondPlayer = new Player('Adam', 3);
 
-      for (let i = 0; i < CARDS_IN_HAND; i += 1) {
-        player.giveCard(firstCard);
-      }
+      player.giveCard(firstCard);
+      player.giveCard(firstCard);
+      secondPlayer.giveCard(firstCard);
+      secondPlayer.giveCard(firstCard);
+      secondPlayer.giveCard(firstCard);
 
       expect(player.canReceiveCard()).toEqual(false);
+      expect(secondPlayer.canReceiveCard()).toEqual(false);
     });
   });
 });

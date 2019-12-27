@@ -7,10 +7,13 @@ class Player extends WithUniqueId {
 
   private readonly cards: GameCard[] = [];
 
-  public constructor(name: string) {
+  private readonly maxNumberOfCards: number;
+
+  public constructor(name: string, maxNumberOfCards: number = CARDS_IN_HAND) {
     super();
 
     this.name = name;
+    this.maxNumberOfCards = maxNumberOfCards;
   }
 
   public getName(): string {
@@ -30,7 +33,7 @@ class Player extends WithUniqueId {
   }
 
   public canReceiveCard(): boolean {
-    return !(this.cards.length >= CARDS_IN_HAND);
+    return !(this.cards.length >= this.maxNumberOfCards);
   }
 }
 
