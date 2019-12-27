@@ -18,28 +18,38 @@ class Board {
   }
 
   private findTurtleFieldIndex(turtleColor: TurtleColor): number {
-    const currentFieldIndex = this.board.findIndex((fieldTurtles) =>
+    const currentTurtleFieldIndex = this.board.findIndex((fieldTurtles) =>
       fieldTurtles.includes(turtleColor)
     );
 
-    return currentFieldIndex;
+    return currentTurtleFieldIndex;
   }
 
   private putTurtles(fieldIndex: number, turtles: TurtleColor[]) {
-    this.board[fieldIndex].push(...turtles);
+    const boardLength = this.board.length;
+
+    if (fieldIndex >= boardLength) {
+      this.board[boardLength - 1].push(...turtles);
+    } else if (fieldIndex < 0) {
+      this.board[0].push(...turtles);
+    } else {
+      this.board[fieldIndex].push(...turtles);
+    }
   }
 
   private takeTurtles(turtleColor: TurtleColor): TurtleColor[] {
-    const currentFieldIndex = this.findTurtleFieldIndex(turtleColor);
-    const currentFieldTurtles = this.board[currentFieldIndex];
+    const currentTurtleFieldIndex = this.findTurtleFieldIndex(turtleColor);
+    const currentFieldTurtles = this.board[currentTurtleFieldIndex];
     const turtleIndex = currentFieldTurtles.indexOf(turtleColor);
+    const numberOfTurtlesToTake =
+      currentTurtleFieldIndex === 0 ? 1 : currentFieldTurtles.length - turtleIndex;
 
-    return this.board[currentFieldIndex].splice(turtleIndex, 1);
+    return this.board[currentTurtleFieldIndex].splice(turtleIndex, numberOfTurtlesToTake);
   }
 
-  public move(turtleColor: TurtleColor, steps: number) {
-    const currentFieldIndex = this.findTurtleFieldIndex(turtleColor);
-    const destinationFieldIndex = currentFieldIndex + steps;
+  public moveTurtle(turtleColor: TurtleColor, steps: number) {
+    const currentTurtleFieldIndex = this.findTurtleFieldIndex(turtleColor);
+    const destinationFieldIndex = currentTurtleFieldIndex + steps;
     const turtlesToMove = this.takeTurtles(turtleColor);
 
     this.putTurtles(destinationFieldIndex, turtlesToMove);
