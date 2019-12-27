@@ -1,10 +1,5 @@
 import uuid from 'uuid';
-
-export type GameCard = {
-  id: string;
-  turtle: 'red' | 'green' | 'blue' | 'yellow' | 'violet' | 'last' | 'any';
-  move: number;
-};
+import GameCard from 'types/GameCard';
 
 const cards: GameCard[] = [
   {

@@ -1,9 +1,9 @@
 import getShuffledArray from 'helpers/getShuffledArray';
-import _ from 'lodash';
-import cards, { GameCard } from './cards';
+import GameCard from 'types/GameCard';
+import cards from './cards';
 
 class CardsPile {
-  private cards: typeof cards;
+  private readonly cards: typeof cards;
 
   public constructor() {
     this.cards = getShuffledArray(cards);
@@ -14,11 +14,11 @@ class CardsPile {
   }
 
   public getAllCards(): typeof cards {
-    return _.cloneDeep(this.cards);
+    return [...this.cards];
   }
 
   public drawCard(): GameCard | null {
-    return _.cloneDeep(this.cards.pop()) || null;
+    return this.cards.pop() || null;
   }
 }
 

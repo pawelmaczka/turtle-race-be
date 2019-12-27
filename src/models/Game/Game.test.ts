@@ -62,4 +62,28 @@ describe('Game', () => {
       }).toThrowError('This game has already maximum number of 4 players');
     });
   });
+
+  describe('start', () => {
+    it('throws an error if current number of players is not equal requested number of players', () => {
+      const game = new Game(2);
+
+      expect(() => {
+        game.start();
+      }).toThrowError("Game can't be started without all players");
+
+      game.addPlayer('Adam');
+
+      expect(() => {
+        game.start();
+      }).toThrowError("Game can't be started without all players");
+    });
+
+    it('returns true if game has successfully started', () => {
+      const game = new Game(2);
+      game.addPlayer('Pawel');
+      game.addPlayer('Adam');
+
+      expect(game.start()).toBe(true);
+    });
+  });
 });

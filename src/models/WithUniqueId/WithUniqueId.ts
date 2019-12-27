@@ -1,7 +1,7 @@
 import uuid from 'uuid';
 
 class WithUniqueId {
-  private id: string;
+  private readonly id: string;
 
   public constructor() {
     this.id = uuid();
