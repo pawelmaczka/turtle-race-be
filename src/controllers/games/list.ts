@@ -1,14 +1,10 @@
-import Controller from '../../types/Controller';
+import Game from 'models/Game';
+import Controller from 'types/Controller';
 
-const games = [
-  {
-    id: 1,
-    players: ['adam', 'ewa', 'damian', 'kasia', 'ola'],
-  },
-];
+const games = [new Game()];
 
 const list: Controller = (req, res) => {
-  res.json(games);
+  res.send(games[0]);
 };
 
 export default list;
