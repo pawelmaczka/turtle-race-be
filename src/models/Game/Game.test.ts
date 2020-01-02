@@ -1,5 +1,7 @@
 import Game from './Game';
 
+jest.mock('helpers/getShuffledArray', () => (array: {}[]) => array);
+
 describe('Game', () => {
   it('has a random ID', () => {
     const firstNewGame = new Game(2);
@@ -84,6 +86,31 @@ describe('Game', () => {
       game.addPlayer('Adam');
 
       expect(game.start()).toBe(true);
+    });
+  });
+
+  describe('getCurrentPlayerId', () => {
+    it('returns undefined if game is not started yet', () => {
+      const game = new Game(2);
+
+      const nextPlayerIdForNoPlayers = game.getCurrentPlayerId();
+      game.addPlayer('Jason');
+      game.addPlayer('Adam');
+      const nextPlayerIdForTwoPlayers = game.getCurrentPlayerId();
+
+      expect(nextPlayerIdForNoPlayers).toEqual(undefined);
+      expect(nextPlayerIdForTwoPlayers).toEqual(undefined);
+    });
+
+    it('returns player id if game is started', () => {
+      const game = new Game(2);
+      game.addPlayer('Jason');
+      game.addPlayer('Adam');
+
+      game.start();
+      const nextPlayerId = game.getCurrentPlayerId();
+
+      expect(typeof nextPlayerId).toEqual('string');
     });
   });
 });

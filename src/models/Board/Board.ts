@@ -1,9 +1,10 @@
 import { NUMBER_OF_BOARD_FIELDS } from 'config/game';
 
-type TurtleColor = 'red' | 'green' | 'blue' | 'yellow' | 'violet';
+export type TurtleColor = 'red' | 'green' | 'blue' | 'yellow' | 'violet';
+export type BoardState = TurtleColor[][];
 
 class Board {
-  private board: TurtleColor[][];
+  private board: BoardState;
 
   public constructor(numberOfFields: number = NUMBER_OF_BOARD_FIELDS) {
     const board = Array(numberOfFields)
@@ -13,7 +14,7 @@ class Board {
     this.board[0] = ['red', 'green', 'blue', 'yellow', 'violet'];
   }
 
-  public getState(): TurtleColor[][] {
+  public getState(): BoardState {
     return this.board;
   }
 

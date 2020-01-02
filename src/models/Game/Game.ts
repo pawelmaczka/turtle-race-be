@@ -1,8 +1,17 @@
 import WithUniqueId from 'models/WithUniqueId';
 import CardsPile from 'models/CardsPile';
 import Player from 'models/Player';
+import Board, { BoardState } from 'models/Board';
+import GameCard from 'types/GameCard';
+import _ from 'lodash';
 
 import { MAX_NUMBER_OF_PLAYERS, MIN_NUMBER_OF_PLAYERS, CARDS_IN_HAND } from 'config/game';
+
+type GameInfo = {
+  board: BoardState;
+  currentPlayerId: string;
+  cards: GameCard[];
+};
 
 class Game extends WithUniqueId {
   private readonly cardsPile: CardsPile;
@@ -10,6 +19,10 @@ class Game extends WithUniqueId {
   private readonly players: Player[] = [];
 
   private readonly numberOfPlayers: number;
+
+  private readonly board: Board;
+
+  private currentPlayerId: string;
 
   public constructor(numberOfPlayers: number) {
     super();
@@ -24,6 +37,7 @@ class Game extends WithUniqueId {
 
     this.cardsPile = new CardsPile();
     this.numberOfPlayers = numberOfPlayers;
+    this.board = new Board();
   }
 
   public getPlayers(): Player[] {
@@ -48,6 +62,7 @@ class Game extends WithUniqueId {
     }
 
     this.giveCardsToPlayers();
+    this.drawFirstPlayer();
 
     return true;
   }
@@ -58,6 +73,26 @@ class Game extends WithUniqueId {
         player.giveCard(this.cardsPile.drawCard());
       }
     });
+  }
+
+  private drawFirstPlayer() {
+    const firstPlayerIndex = _.random(this.players.length - 1);
+    const nextPlayer = this.getPlayers()[firstPlayerIndex];
+
+    this.currentPlayerId = nextPlayer.getId();
+  }
+
+  public getCurrentPlayerId(): string {
+    return this.currentPlayerId;
+  }
+
+  // TODO
+  public getGameInfoForPlayer(player: Player): GameInfo {
+    return {
+      board: this.board.getState(),
+      currentPlayerId: this.getCurrentPlayerId(),
+      cards: player.getCards(),
+    };
   }
 }
 

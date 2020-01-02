@@ -2,8 +2,10 @@ import getShuffledArray from 'helpers/getShuffledArray';
 import GameCard from 'types/GameCard';
 import cards from './cards';
 
+export type Cards = typeof cards;
+
 class CardsPile {
-  private readonly cards: typeof cards;
+  private readonly cards: Cards;
 
   public constructor() {
     this.cards = getShuffledArray(cards);
@@ -13,7 +15,7 @@ class CardsPile {
     return this.cards.length;
   }
 
-  public getAllCards(): typeof cards {
+  public getAllCards(): Cards {
     return [...this.cards];
   }
 
