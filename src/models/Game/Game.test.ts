@@ -1,3 +1,4 @@
+import Player from 'models/Player';
 import Game from './Game';
 
 jest.mock('helpers/getShuffledArray', () => (array: {}[]) => array);
@@ -32,8 +33,11 @@ describe('Game', () => {
     it('adds a new player to the players list', () => {
       const game = new Game(2);
 
-      game.addPlayer('Adam');
-      game.addPlayer('Ewa');
+      const adam = new Player('Adam');
+      const ewa = new Player('Ewa');
+
+      game.addPlayer(adam);
+      game.addPlayer(ewa);
 
       const players = game.getPlayers();
 
@@ -45,22 +49,28 @@ describe('Game', () => {
     it('throws an error when trying to add to many players', () => {
       const firstGame = new Game(2);
 
-      firstGame.addPlayer('Adam');
-      firstGame.addPlayer('Ewa');
+      const adam = new Player('Adam');
+      const ewa = new Player('Ewa');
+      const jacek = new Player('Jacek');
+      const archie = new Player('Archie');
+      const justin = new Player('Justin');
+
+      firstGame.addPlayer(adam);
+      firstGame.addPlayer(ewa);
 
       expect(() => {
-        firstGame.addPlayer('Pawel');
+        firstGame.addPlayer(jacek);
       }).toThrowError('This game has already maximum number of 2 players');
 
       const secondGame = new Game(4);
 
-      secondGame.addPlayer('Adam');
-      secondGame.addPlayer('Ewa');
-      secondGame.addPlayer('John');
-      secondGame.addPlayer('Archie');
+      secondGame.addPlayer(adam);
+      secondGame.addPlayer(ewa);
+      secondGame.addPlayer(jacek);
+      secondGame.addPlayer(archie);
 
       expect(() => {
-        secondGame.addPlayer('Pawel');
+        secondGame.addPlayer(justin);
       }).toThrowError('This game has already maximum number of 4 players');
     });
   });
@@ -73,7 +83,9 @@ describe('Game', () => {
         game.start();
       }).toThrowError("Game can't be started without all players");
 
-      game.addPlayer('Adam');
+      const adam = new Player('Adam');
+
+      game.addPlayer(adam);
 
       expect(() => {
         game.start();
@@ -82,8 +94,11 @@ describe('Game', () => {
 
     it('returns true if game has successfully started', () => {
       const game = new Game(2);
-      game.addPlayer('Pawel');
-      game.addPlayer('Adam');
+      const adam = new Player('Adam');
+      const ewa = new Player('Ewa');
+
+      game.addPlayer(adam);
+      game.addPlayer(ewa);
 
       expect(game.start()).toBe(true);
     });
@@ -94,8 +109,10 @@ describe('Game', () => {
       const game = new Game(2);
 
       const nextPlayerIdForNoPlayers = game.getCurrentPlayerId();
-      game.addPlayer('Jason');
-      game.addPlayer('Adam');
+      const adam = new Player('Adam');
+      const ewa = new Player('Ewa');
+      game.addPlayer(adam);
+      game.addPlayer(ewa);
       const nextPlayerIdForTwoPlayers = game.getCurrentPlayerId();
 
       expect(nextPlayerIdForNoPlayers).toEqual(undefined);
@@ -104,8 +121,11 @@ describe('Game', () => {
 
     it('returns player id if game is started', () => {
       const game = new Game(2);
-      game.addPlayer('Jason');
-      game.addPlayer('Adam');
+      const adam = new Player('Adam');
+      const ewa = new Player('Ewa');
+
+      game.addPlayer(adam);
+      game.addPlayer(ewa);
 
       game.start();
       const nextPlayerId = game.getCurrentPlayerId();

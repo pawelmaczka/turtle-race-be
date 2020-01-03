@@ -44,13 +44,17 @@ class Game extends WithUniqueId {
     return [...this.players];
   }
 
+  public getPlayer(id: string): Player {
+    return this.players.find((player) => player.getId() === id);
+  }
+
   public getNumberOfPlayers(): number {
     return this.numberOfPlayers;
   }
 
-  public addPlayer(playerName: string) {
+  public addPlayer(player: Player) {
     if (this.players.length < this.numberOfPlayers) {
-      this.players.push(new Player(playerName));
+      this.players.push(player);
     } else {
       throw new Error(`This game has already maximum number of ${this.numberOfPlayers} players`);
     }
