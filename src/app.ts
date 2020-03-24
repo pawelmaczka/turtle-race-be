@@ -1,20 +1,60 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Application } from 'express';
 import bodyParser from 'body-parser';
+import { createServer, Server } from 'http';
+import Socket from 'services/Socket';
+import Game from 'models/Game';
 
 import games from './controllers/games';
 
-const app = express();
+class App {
+  private app: Application;
 
-app.set('port', process.env.PORT || 3000);
-app.set('view engine', 'pug');
-// app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+  private server: Server;
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('hello world');
-});
+  private port: number | string;
 
-app.use('/games', games);
+  public async start() {
+    this.createExpressApp();
+    this.createServer();
+    await this.createSocketServer();
+    this.configure();
+    this.listen();
+  }
 
-export default app;
+  private createExpressApp() {
+    this.app = express();
+
+    this.app.use(bodyParser.json());
+    this.app.use(bodyParser.urlencoded({ extended: true }));
+  }
+
+  private createServer() {
+    if (this.app) {
+      this.server = createServer(this.app);
+    }
+  }
+
+  private async createSocketServer() {
+    await Socket.startServer(this.server);
+  }
+
+  private configure() {
+    this.port = process.env.PORT || 3000;
+    this.configureRoutes();
+  }
+
+  private configureRoutes() {
+    this.app.get('/', (req: Request, res: Response) => {
+      res.send('hello world');
+    });
+    this.app.use('/games', games);
+  }
+
+  private listen() {
+    this.server.listen(this.port, () => {
+      console.log('Application is running on port', this.port);
+    });
+  }
+}
+
+export default App;

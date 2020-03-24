@@ -1,5 +1,5 @@
-import app from './app';
+import App from './App';
 
-app.listen(app.get('port'), () => {
-  console.log('Application is running at port', app.get('port'));
-});
+const application = new App();
+
+application.start();

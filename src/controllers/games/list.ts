@@ -1,10 +1,8 @@
-import Game from 'models/Game';
 import Controller from 'types/Controller';
-
-const games = [new Game()];
+import GamesManager from 'services/GamesManager';
 
 const list: Controller = (req, res) => {
-  res.send(games[0]);
+  res.send(GamesManager.getGames());
 };
 
 export default list;

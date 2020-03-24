@@ -24,16 +24,16 @@ describe('CardsPile', () => {
       expect(cardsPile.getAllCards()).toEqual(cardsOnThePile);
     });
 
-    it('returs last next card on the pile on every call', () => {
+    it('returns last next card on the pile on every call', () => {
       const cardsPile = new CardsPile();
       const allCardsOnThePile = cardsPile.getAllCards();
       const allCardsNumber = allCardsOnThePile.length;
 
-      const drawedCard = cardsPile.drawCard();
-      const secondDrawedCard = cardsPile.drawCard();
+      const drawnCard = cardsPile.drawCard();
+      const secondDrawnCard = cardsPile.drawCard();
 
-      expect(drawedCard).toEqual(allCardsOnThePile[allCardsNumber - 1]);
-      expect(secondDrawedCard).toEqual(allCardsOnThePile[allCardsNumber - 2]);
+      expect(drawnCard).toEqual(allCardsOnThePile[allCardsNumber - 1]);
+      expect(secondDrawnCard).toEqual(allCardsOnThePile[allCardsNumber - 2]);
     });
 
     it('returns null if cardsPile is empty', () => {

@@ -7,9 +7,9 @@ const firstCard: GameCard = {
   move: 2,
 };
 const secondCard: GameCard = {
-  id: '1',
-  turtle: 'red',
-  move: 2,
+  id: '2',
+  turtle: 'blue',
+  move: -2,
 };
 
 describe('Player', () => {
@@ -73,6 +73,38 @@ describe('Player', () => {
 
       expect(player.canReceiveCard()).toEqual(false);
       expect(secondPlayer.canReceiveCard()).toEqual(false);
+    });
+  });
+
+  describe('playCard', () => {
+    it('throws an error if player has no card with given id', () => {
+      const player = new Player('Adam', 3);
+      player.giveCard(firstCard);
+
+      expect(() => {
+        player.playCard('5');
+      }).toThrowError("Can't play not owned card");
+    });
+
+    it('returns card with passed id', () => {
+      const player = new Player('Adam', 3);
+      player.giveCard(firstCard);
+      player.giveCard(secondCard);
+
+      expect(player.playCard('1')).toEqual(firstCard);
+    });
+
+    it('removes card with given id from players hand', () => {
+      const player = new Player('Adam', 3);
+      player.giveCard(firstCard);
+      player.giveCard(secondCard);
+
+      player.playCard('1');
+
+      const allCards = player.getCards();
+
+      expect(allCards.length).toBe(1);
+      expect(allCards[0]).toEqual(secondCard);
     });
   });
 });

@@ -22,10 +22,14 @@ class Game extends WithUniqueId {
 
   private readonly board: Board;
 
-  private currentPlayerId: string;
+  private currentPlayer: Player;
 
   public constructor(numberOfPlayers: number) {
     super();
+
+    if (numberOfPlayers === undefined) {
+      throw new Error("Number of players can't be undefined");
+    }
 
     if (numberOfPlayers > MAX_NUMBER_OF_PLAYERS) {
       throw new Error(`Can't create game for more than ${MAX_NUMBER_OF_PLAYERS} players`);
@@ -44,7 +48,7 @@ class Game extends WithUniqueId {
     return [...this.players];
   }
 
-  public getPlayer(id: string): Player {
+  public getPlayer(id: string): Player | undefined {
     return this.players.find((player) => player.getId() === id);
   }
 
@@ -60,7 +64,11 @@ class Game extends WithUniqueId {
     }
   }
 
-  public start() {
+  public start(player: Player) {
+    if (player !== this.players[0]) {
+      throw new Error('Only host can start the game');
+    }
+
     if (this.numberOfPlayers !== this.getPlayers().length) {
       throw new Error("Game can't be started without all players");
     }
@@ -83,20 +91,46 @@ class Game extends WithUniqueId {
     const firstPlayerIndex = _.random(this.players.length - 1);
     const nextPlayer = this.getPlayers()[firstPlayerIndex];
 
-    this.currentPlayerId = nextPlayer.getId();
+    this.currentPlayer = nextPlayer;
   }
 
-  public getCurrentPlayerId(): string {
-    return this.currentPlayerId;
+  public changeCurrentPlayer() {
+    const currentPlayerIndex = this.players.findIndex((player) => player === this.currentPlayer);
+    const newCurrentPlayerIndex = (currentPlayerIndex + 1) % this.numberOfPlayers;
+    this.currentPlayer = this.players[newCurrentPlayerIndex];
+  }
+
+  public getCurrentPlayer(): Player | undefined {
+    return this.currentPlayer;
+  }
+
+  public performTurn(player: Player, cardId: string) {
+    if (player !== this.currentPlayer) {
+      throw new Error("Can't play card in another player's turn");
+    }
+
+    const card = player.playCard(cardId);
+
+    this.board.moveTurtle(card.turtle, card.move);
+    player.giveCard(this.cardsPile.drawCard());
   }
 
   // TODO
   public getGameInfoForPlayer(player: Player): GameInfo {
     return {
       board: this.board.getState(),
-      currentPlayerId: this.getCurrentPlayerId(),
+      currentPlayerId: this.currentPlayer.getId(),
       cards: player.getCards(),
     };
+  }
+
+  public sendGameStateToAllPlayers() {
+    // this.start();
+    this.players.forEach((player) => {
+      const socket = player.getSocket();
+      // socket.emit('game state', this.getGameInfoForPlayer(player));
+      console.log(this.getGameInfoForPlayer(player));
+    });
   }
 }
 
